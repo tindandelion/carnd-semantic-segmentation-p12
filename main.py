@@ -27,7 +27,7 @@ else:
 NUM_CLASSES = 2
 KEEP_PROB = 0.8
 LEARNING_RATE = 1e-3
-EPOCHS = 10
+EPOCHS = 1
 BATCH_SIZE = 32
 L2_REG = 1e-4
 STDDEV = 0.01
@@ -150,7 +150,7 @@ def download_vgg(data_dir):
     ssl._create_default_https_context = ssl._create_unverified_context
     helper.maybe_download_pretrained_vgg(data_dir)
 
-def process_video(sess, input_file, output_file):
+def process_video(sess, logits, keep_prob, input_image, input_file, output_file):
     image_shape = (704, 1280)
 
     def process_frame(frame):
@@ -205,7 +205,7 @@ def run():
                           cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
 
         helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
-        process_video(sess, 'project_video.mp4', 'output_video.mp4')
+        process_video(sess, logits, keep_prob, input_image, 'project_video.mp4', 'output_video.mp4')
 
 if __name__ == '__main__':
     run()
