@@ -4,9 +4,12 @@ import helper
 import warnings
 import ssl
 import project_tests as tests
+import scipy
+import numpy as np
+
 from tqdm import tqdm
 from distutils.version import LooseVersion
-
+from moviepy.editor import VideoFileClip
 
 # Check TensorFlow Version
 assert LooseVersion(tf.__version__) >= LooseVersion(
@@ -147,6 +150,23 @@ def download_vgg(data_dir):
     ssl._create_default_https_context = ssl._create_unverified_context
     helper.maybe_download_pretrained_vgg(data_dir)
 
+def process_video(input_file, output_file):
+    image_shape = (704, 1280)
+
+    def process_frame(frame):
+        frame = scipy.misc.imresize(frame, image_shape)
+        im_softmax = sess.run([tf.nn.softmax(logits)], {keep_prob: 1.0, input_image: [frame]})
+        im_softmax = im_softmax[0][:, 1].reshape(image_shape[0], image_shape[1])
+        segmentation = (im_softmax > 0.5).reshape(image_shape[0], image_shape[1], 1)
+        mask = np.dot(segmentation, np.array([[0, 255, 0, 127]]))
+        mask = scipy.misc.toimage(mask, mode="RGBA")
+        street_im = scipy.misc.toimage(frame)
+        street_im.paste(mask, box=None, mask=mask)
+        return np.array(street_im)
+
+    video = VideoFileClip(input_file)
+    processed = video.fl_image(process_frame)
+    processed.write_videofile(output_file, audio=False)
 
 def run():
     image_shape = (160, 576)
@@ -185,9 +205,7 @@ def run():
                           cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
 
         helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
-
-        # OPTIONAL: Apply the trained model to a video
-
+        process_video('project_video.mp4', 'output_video.mp4')
 
 if __name__ == '__main__':
     run()
