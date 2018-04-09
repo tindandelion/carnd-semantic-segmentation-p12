@@ -6,6 +6,7 @@ import ssl
 import project_tests as tests
 import scipy
 import numpy as np
+import matplotlib.pyplot as plt
 
 from tqdm import tqdm
 from distutils.version import LooseVersion
@@ -25,7 +26,7 @@ else:
 
 
 NUM_CLASSES = 2
-KEEP_PROB = 0.8
+KEEP_PROB = 1.0
 LEARNING_RATE = 1e-3
 EPOCHS = 40
 BATCH_SIZE = 32
@@ -129,14 +130,14 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     """
     losses = []
     for epoch in range(epochs):
-        desc = "Epoch {0}/{1}".format(epoch+1, epochs)
-        for images, labels in tqdm(get_batches_fn(batch_size), desc=desc):
+        for images, labels in get_batches_fn(batch_size):
             _, loss = sess.run([train_op, cross_entropy_loss],
                                feed_dict={input_image: images,
                                           correct_label: labels,
                                           keep_prob: KEEP_PROB,
                                           learning_rate: LEARNING_RATE})
             losses.append(loss)
+        print("Epoch {0}/{1}: Loss {2:f}".format(epoch+1, epochs, loss))
     return losses
 
 
@@ -167,6 +168,15 @@ def process_video(sess, logits, keep_prob, input_image, input_file, output_file)
     video = VideoFileClip(input_file)
     processed = video.fl_image(process_frame)
     processed.write_videofile(output_file, audio=False)
+
+def plot_loss(loss, output_file):
+    plt.plot(loss)
+    plt.title('Cross Entropy Loss')
+    plt.xlabel('# Epoch')
+    plt.ylabel('Loss')
+    plt.grid()
+    plt.ylim(0, 1)
+    plt.savefig(output_file)    
 
 def run():
     image_shape = (160, 576)
@@ -204,6 +214,7 @@ def run():
         losses = train_nn(sess, EPOCHS, BATCH_SIZE, get_batches_fn, train_op,
                           cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
 
+        plot_loss(losses, 'cross-entropy.png')
         helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
         process_video(sess, logits, keep_prob, input_image, 'project_video.mp4', 'output_video.mp4')
 
