@@ -199,7 +199,6 @@ def run():
         # OPTIONAL: Augment Images for better results
         #  https://datascience.stackexchange.com/questions/5224/how-to-prepare-augment-images-for-neural-network
 
-        load_vgg(sess, vgg_path)
         input_image, keep_prob, layer3, layer4, layer7 = load_vgg(
             sess, vgg_path)
         output_layer = layers(layer3, layer4, layer7, NUM_CLASSES)
@@ -214,9 +213,9 @@ def run():
         losses = train_nn(sess, EPOCHS, BATCH_SIZE, get_batches_fn, train_op,
                           cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
 
-        plot_loss(losses, 'cross-entropy.png')
+        plot_loss(losses, 'output/cross-entropy.png')
         helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
-        process_video(sess, logits, keep_prob, input_image, 'project_video.mp4', 'output_video.mp4')
+        process_video(sess, logits, keep_prob, input_image, 'project_video.mp4', 'output/output_video.mp4')
 
 if __name__ == '__main__':
     run()
