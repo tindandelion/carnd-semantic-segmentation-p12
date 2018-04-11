@@ -172,7 +172,7 @@ def process_video(sess, logits, keep_prob, input_image, input_file, output_file)
 def plot_loss(loss, output_file):
     plt.plot(loss)
     plt.title('Cross Entropy Loss')
-    plt.xlabel('# Epoch')
+    plt.xlabel('# Batch')
     plt.ylabel('Loss')
     plt.grid()
     plt.ylim(0, 1)
@@ -184,20 +184,12 @@ def run():
     runs_dir = './runs'
     tests.test_for_kitti_dataset(data_dir)
 
-    # Download pretrained vgg model
     download_vgg(data_dir)
-
-    # OPTIONAL: Train and Inference on the cityscapes dataset instead of the Kitti dataset.
-    # You'll need a GPU with at least 10 teraFLOPS to train on.
-    #  https://www.cityscapes-dataset.com/
 
     with tf.Session() as sess:
         vgg_path = os.path.join(data_dir, 'vgg')
         get_batches_fn = helper.gen_batch_function(
             os.path.join(data_dir, 'data_road/training'), image_shape)
-
-        # OPTIONAL: Augment Images for better results
-        #  https://datascience.stackexchange.com/questions/5224/how-to-prepare-augment-images-for-neural-network
 
         input_image, keep_prob, layer3, layer4, layer7 = load_vgg(
             sess, vgg_path)
