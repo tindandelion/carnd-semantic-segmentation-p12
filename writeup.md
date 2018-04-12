@@ -47,7 +47,7 @@ As an optional challenge, I applied the trained network to a video from one of t
 previuos projects. The results make sense on average, but show that the performance 
 of the segmentation should be improved (see Further Improvements for suggestions).
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/f5DXdcuX3hs?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+[![Alt text](https://img.youtube.com/vi/f5DXdcuX3hs/0.jpg)](https://youtu.be/f5DXdcuX3hs)
 
 ## Future improvements
 
