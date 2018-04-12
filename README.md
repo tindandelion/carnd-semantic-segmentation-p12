@@ -30,7 +30,7 @@ that provide good results on the test dataset:
 | Epochs         | 40                  |
 | Dropout rate   | 0.5                 |
 | L2 reg         | 1e-4                |
-| Learning rate  | 0.0001              |
+| Learning rate  | 1e-4                |
 
 ![Training cross-entropy loss](output/cross-entropy.png)
 
