@@ -15,13 +15,13 @@ dimensions, effectively classifying each pixel from the source image.
 
 Skip connections are added to improve performance. Such connections take the intermediate 
 results from deeper VGG layers (in this case, convolutional layers 3 and 4), and add them 
-element-wise to the respective intermediate upsampled results. Skip connections have been 
+element-wise to the respective intermediate up-sampled results. Skip connections have been 
 shown to improve the segmentation detail. To prevent overfitting, L2 regularization was used 
 for 1x1 convolutional layers and up-sampling layers. 
 
 ## Training process
 
-After a few experiements, I've come up with the following set of hyperparameters 
+After a few experiments, I've come up with the following set of hyperparameters 
 that provide good results on the test dataset: 
 
 |                |                     | 
