@@ -21,5 +21,40 @@ for 1x1 convolutional layers and up-sampling layers.
 
 ## Training process
 
+After a few experiements, I've come up with the following set of hyperparameters 
+that provide good results on the test dataset: 
+
+|                |                     | 
+|:-------------- | -------------------:|
+| Batch size     | 16                  |
+| Epochs         | 40                  |
+| Dropout rate   | 0.5                 |
+| L2 reg         | 1e-4                |
+| Learning rate  | 0.0001              |
+
+![Training cross-entropy loss](output/cross-entropy.png)
+
+## Results
+
+Some of the results from the test dataset are shown below: 
+
+![](runs/1523350225.1684039/um_000000.png)
+![](runs/1523350225.1684039/um_000055.png)
+![](runs/1523350225.1684039/uu_000086.png)
+![](runs/1523350225.1684039/uu_000083.png)
+
+As an optional challenge, I applied the trained network to a video from one of the 
+previuos projects. The results make sense on average, but show that the performance 
+of the segmentation should be improved (see Further Improvements for suggestions).
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/f5DXdcuX3hs?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+## Future improvements
+
+* Use source image augmentation for more robust results;
+* Use bigger training dataset (e.g. CityScapes);
+* Use train/validation split and IOU metric to fine-tune hyperparameters. 
+
+
 
 
